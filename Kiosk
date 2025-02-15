@@ -1,0 +1,81 @@
+import java.text.*;
+
+public class Kiosk {
+
+	private static final String LIST = "|START|";
+	public Item head;
+
+	public int getSize() {
+		if(head==null) {
+			return 0;
+		}
+		return getSizeRekurs(head,1);
+	}
+
+	private int getSizeRekurs(Item item,int number) {
+		if(item.getNext()!=null) {
+			return getSizeRekurs(item.getNext(),number+1);
+		}
+		return number;
+	}
+
+	public void add(Item newItem) {
+		if(head==null) {
+			head=newItem;	
+		}
+		else {
+			addRekurs(head,newItem);
+		}
+	}
+
+	private void addRekurs(Item item, Item newItem) {
+		if(item.getNext()!=null) {
+			addRekurs(item.getNext(),newItem);
+		}
+		else {
+			item.setNext(newItem);
+		}
+
+	}
+
+
+	public double getPrice(String name) {
+	if(head==null) {
+		return 0;
+	}
+	else {
+		return getPriceRekurs(head,name);
+	}
+	}
+
+	private double getPriceRekurs(Item item, String name) {
+		if(item.getName().equals(name)) {
+			return item.getPrice();
+		}
+		else if(item.getNext()!=null) {
+			return getPriceRekurs(item.getNext(),name);
+		}
+		return 0;
+		
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder str = new StringBuilder(LIST);
+		DecimalFormat f = new DecimalFormat("#0.00");
+
+		Item pointer = head;
+		while (pointer != null) {
+			str.append("---> ");
+			str.append(pointer.getName());
+			str.append(" (" + f.format(pointer.getPrice()) + ") ");
+			pointer = pointer.getNext();
+		}
+
+		str.append("---> null");
+
+		return str.toString();
+	}
+
+}
